@@ -1,9 +1,12 @@
 version: '3'
 services:
   db:
-    image: postgres:9.5
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    command: mysqld --character-set-server=utf8mb4 --explicit_defaults_for_timestamp=true
     volumes:
-      - ./tmp/db:/var/lib/postgresql/data
+      - mysql-data:/var/lib/mysql
     restart: always
     env_file:
       - db.env
@@ -13,8 +16,10 @@ services:
     volumes:
       - .:/myapp
     ports:
-      - "3000:3000"
+      - "80:3000"
     depends_on:
       - db
     env_file:
       - app.env
+volumes:
+  mysql-data:
